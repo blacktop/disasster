@@ -32,7 +32,7 @@ func main() {
 $ brew install llvm z3
 ```
 
-### Or Build
+#### Or Build
 
 ```bash
 $ git clone https://github.com/llvm/llvm-project.git
