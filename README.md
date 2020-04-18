@@ -1,4 +1,4 @@
-# disasster
+# disasster [WIP] 🚧
 
 [![Go](https://github.com/blacktop/disasster/workflows/Go/badge.svg?branch=master)](https://github.com/blacktop/disasster/actions) [![GoDoc](https://godoc.org/github.com/blacktop/disasster?status.svg)](https://pkg.go.dev/github.com/blacktop/disasster) [![License](http://img.shields.io/:license-mit-blue.svg)](http://doge.mit-license.org)
 
