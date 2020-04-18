@@ -48,7 +48,9 @@ $ make AArch64CommonTableGen -j
 ```bash
 $ git clone https://github.com/llvm/llvm-project.git
 $ cd llvm-project/llvm/lib/Target/AArch64
-$ /usr/local/opt/llvm/bin/llvm-tblgen AArch64.td -I=../../../include --dump-json > out.json
+$ git checkout release/10.x
+# if you already installed llvm from homebrew
+$ /usr/local/opt/llvm/bin/llvm-tblgen AArch64.td -I=../../../include --dump-json > table.json
 ```
 
 ### Update `tables.go`
