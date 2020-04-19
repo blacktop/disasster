@@ -1,0 +1,4 @@
+/*
+Package disaster implements diassemblers for all the LLVM supported targets.
+*/
+package disaster
