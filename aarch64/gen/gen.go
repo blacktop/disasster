@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
-	"os"
 )
 
 type Table map[string]Inst
@@ -136,20 +135,58 @@ func check(e error) {
 	}
 }
 
+func genMaskAndBase(inst []interface{}) (uint32, uint32) {
+	var base, mask uint32
+	for off, i := range inst {
+		switch v := i.(type) {
+		default:
+			fmt.Printf("unexpected type %T\n", v)
+		case float64:
+			switch v {
+			case 0:
+				mask |= 1 << uint(off)
+			case 1:
+				base |= 1 << uint(off)
+			}
+			if off == 16 {
+				mask >>= 16
+				base >>= 16
+			}
+		case map[string]interface{}:
+			// fmt.Println(i)
+		}
+	}
+
+	mask |= base
+	return mask, base
+}
+
 func main() {
 
-	filename := flag.String("o", "tables2.go", "the name of the automatically generated file")
+	// filename := flag.String("o", "tables2.go", "the name of the automatically generated file")
 	jsonfile := flag.String("i", "./table.json", "the llvm-tblgen JSON file")
 	flag.Parse()
-	out, err := os.Create(*filename)
-	check(err)
-	defer out.Close()
+
+	// out, err := os.Create(*filename)
+	// check(err)
+	// defer out.Close()
 
 	tableJSON, err := ioutil.ReadFile(*jsonfile)
 	check(err)
 
 	var table Table
 	err = json.Unmarshal(tableJSON, &table)
-	adrp := table["ADRP"]
-	fmt.Println(adrp)
+
+	for name, inst := range table {
+		if inst.Size == 4 {
+			mask, base := genMaskAndBase(inst.Inst)
+			fmt.Println(inst.AsmString)
+			fmt.Printf("{%#x, %#x, %s, instArgs{}, nil}\n", mask, base, name)
+		}
+	}
+	// adrp := table["ADRP"]
+	// // ADRP <Xd>, <label>
+	// // {0x9f000000, 0x90000000, ADRP, instArgs{arg_Xd, arg_slabel_immhi_immlo_12}, nil},
+	// mask, base := genMaskAndBase(adrp.Inst)
+
 }
